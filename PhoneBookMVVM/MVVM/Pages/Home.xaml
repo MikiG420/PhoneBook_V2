@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PhoneBookMVVM.MVVM.Pages.Home"
+             Title="Home">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem 
+            Text="Dodaj"
+            Clicked="OnAddContactButtonClicked"
+            Order="Primary"
+            Priority="0" />
+        <ToolbarItem 
+            Text="Usuń zaznaczone"
+            Clicked="ClearMany_Clicked"
+            Order="Primary"
+            Priority="1"/>
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="10">
+
+            <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
+                <SearchBar
+                x:Name="search_bar"
+                TextChanged="SearchBar_TextChanged"
+                Placeholder="Szukaj kontaktu..."
+                WidthRequest="200"
+                />
+
+                <Button 
+                Text="Resetuj"
+                Clicked="ResetFilter_Clicked"
+                BackgroundColor="LightGray"
+                />
+            </HorizontalStackLayout>
+
+            <CollectionView 
+            x:Name="contacts_collection" 
+            ItemsSource="{Binding SortedContacts}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame 
+                        WidthRequest="300"
+                        Padding="10" 
+                        CornerRadius="10" 
+                        BorderColor="LightGray">
+                            <SwipeView>
+                                <SwipeView.LeftItems>
+                                    <SwipeItem Text="Usuń" 
+                                               Invoked="ClearContact_Clicked"/>
+                                    <SwipeItem Text="Modyfikuj" 
+                                               Invoked="OnEditButtonClicked"/>
+                                </SwipeView.LeftItems>
+
+                                <VerticalStackLayout Spacing="5">
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Label Text="{Binding FirstName}" 
+                                               FontAttributes="Bold" 
+                                               FontSize="16"/>
+                                        <Label Text="{Binding LastName}"  
+                                               FontAttributes="Bold" 
+                                               FontSize="16"/>
+                                    </HorizontalStackLayout>
+                                    <Label Text="{Binding PhoneNumber}"
+                                           FontSize="16" 
+                                           TextColor="Gray"/>
+
+                                    <HorizontalStackLayout Spacing="10">
+                                        <CheckBox IsChecked="{Binding IsSelected}" 
+                                                  VerticalOptions="Center"/>
+                                    </HorizontalStackLayout>
+
+                                    <FlyoutBase.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="Usun" 
+                                                            Clicked="ClearContact_Clicked" 
+                                                            CommandParameter="{Binding}"/>
+                                            <MenuFlyoutItem Text="Modyfikuj" 
+                                                            Clicked="OnEditButtonClicked" 
+                                                            CommandParameter="{Binding}"/>
+                                        </MenuFlyout>
+                                    </FlyoutBase.ContextFlyout>
+                                </VerticalStackLayout>
+                            </SwipeView>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
